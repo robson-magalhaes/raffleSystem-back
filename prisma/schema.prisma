@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int               @id @default(autoincrement())
+  userName         String
+  lastName         String
+  telephone        String
+  email            String            @unique
+  password         String
+  chave_pix        String            @unique
+  balance_pix      Decimal?          @default(0) @db.Decimal(10, 2)
+  raffles          Raffles[]
+  purchases        Purchase[]
+  purchasesByQuota PurchaseByQuota[]
+  campaing         Campaign[]
+}
+
+model Raffles {
+  id               Int        @id @default(autoincrement())
+  userId           Int
+  productName      String
+  productValue     Decimal    @db.Decimal(10, 2)
+  productQnt       Int
+  ticketValue      Decimal    @db.Decimal(10, 2)
+  totalTicketValue Decimal    @default(0) @db.Decimal(10, 2)
+  soldTickets      Decimal    @default(0) @db.Decimal(10, 2)
+  awardedQuota     String
+  winner           String?
+  user             User       @relation(fields: [userId], references: [id])
+  purchase         Purchase[]
+}
+
+model Campaign {
+  id                   Int     @id @default(autoincrement())
+  userId               Int
+  name                 String
+  description          String?
+  quota                Decimal @db.Decimal(10, 2)
+  minValue             Decimal @db.Decimal(10, 2)
+  totalProductValue    Decimal @default(0) @db.Decimal(10, 2)
+  totalSoldTicketValue Decimal @default(0) @db.Decimal(10, 2)
+  soldTicket           Int     @default(0)
+  user                 User    @relation(fields: [userId], references: [id])
+}
+
+model Purchase {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  raffleId      Int?
+  buyer         String
+  telephone     String
+  ticketNumber  Decimal  @db.Decimal(10, 2)
+  paymentStatus String?
+  txid          String   @unique
+  user          User     @relation(fields: [userId], references: [id])
+  raffle        Raffles? @relation(fields: [raffleId], references: [id])
+}
+
+model PurchaseByQuota {
+  id            Int     @id @default(autoincrement())
+  userId        Int
+  buyer         String
+  telephone     String
+  ticketNumber  Decimal @db.Decimal(10, 2)
+  paymentStatus String?
+  txid          String   @unique
+  user          User    @relation(fields: [userId], references: [id])
+}
