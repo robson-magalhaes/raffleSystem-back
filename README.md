@@ -23,8 +23,5 @@ A API foi construída utilizando **Node.js**, **TypeScript** e **Express**, com 
 
 ## Observações
 
-Esta API foi desenvolvida para funcionar de forma integrada à plataforma front-end de sorteios, disponível também neste repositório do GitHub.
+Esta API foi desenvolvida para funcionar de forma integrada à plataforma front-end de sorteios, disponível também em meus repositórios do GitHub.
 
----
-
-Se desejar, posso incluir trechos de código de exemplo, endpoints da API ou instruções de instalação com `Docker` ou `npm`. Deseja isso?
